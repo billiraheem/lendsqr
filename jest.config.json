@@ -1,0 +1,31 @@
+{
+  "verbose": true,
+  "testEnvironment": "node",
+  "preset": "ts-jest",
+  "roots": ["<rootDir>/tests"],
+  "moduleFileExtensions": ["ts", "js", "json"],
+  "testMatch": ["**/*.test.ts"],
+  "transform": {
+    "^.+\\.ts$": ["ts-jest", {
+      "tsconfig": "tsconfig.test.json"
+    }],
+    "^.+\\.js$": ["ts-jest", {
+      "tsconfig": "tsconfig.test.json",
+      "useESM": false
+    }]
+  },
+  "transformIgnorePatterns": [
+    "node_modules/(?!uuid)"
+  ],
+  "collectCoverageFrom": [
+    "src/**/*.ts",
+    "!src/server.ts",
+    "!src/**/index.ts",
+    "!src/database/migrations/**",
+    "!src/database/seeds/**"
+  ],
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["text", "lcov", "clover"],
+  "clearMocks": true,
+  "resetMocks": true
+}

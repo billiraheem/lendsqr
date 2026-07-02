@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit secrets)
+.env
+
+# Build output
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Test coverage
+coverage/
+
+# Architecture decisions (internal notes)
+ARCHITECTURE_DECISIONS.md
+
+# Teaching notes
+TEACHING_NOTES.md
