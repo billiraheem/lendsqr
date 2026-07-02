@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import db from '../database/connection';
-import { IUser, ICreateUserDTO } from '../interfaces';
+import { IUser } from '../interfaces';
 import { TABLE_NAMES } from '../utils';
 
 class UserModel {

@@ -14,7 +14,7 @@ export const generalLimiter = rateLimit({
 
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,
+  max: config.isProduction ? 10 : 100, // Strict in prod, lenient in dev for testing
   message: {
     status: 'error',
     message: 'Too many authentication attempts. Please try again later.',
