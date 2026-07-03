@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 import { AccountModel, TransactionModel } from '../models';
 import {
   IAccountResponse,
@@ -26,7 +26,7 @@ class AccountService {
     userId: number,
     amount: number
   ): Promise<ITransactionResponse> {
-    const reference = uuidv4();
+    const reference = crypto.randomUUID();
 
     const transaction = await db.transaction(async (trx) => {
       const account = await AccountModel.findByUserIdForUpdate(userId, trx);
@@ -80,7 +80,7 @@ class AccountService {
     userId: number,
     amount: number
   ): Promise<ITransactionResponse> {
-    const reference = uuidv4();
+    const reference = crypto.randomUUID();
 
     const transaction = await db.transaction(async (trx) => {
       // Lock the account
@@ -147,7 +147,7 @@ class AccountService {
     amount: number,
     description?: string
   ): Promise<ITransactionResponse> {
-    const reference = uuidv4();
+    const reference = crypto.randomUUID();
 
     const transaction = await db.transaction(async (trx) => {
       const senderAccount = await AccountModel.findByUserIdForUpdate(userId, trx);
@@ -211,7 +211,7 @@ class AccountService {
       // Create transaction record for receiver (credit)
       await TransactionModel.create(
         {
-          reference: uuidv4(), // Different reference for the credit side
+          reference: crypto.randomUUID(), // Different reference for the credit side
           account_id: recipientLocked.id,
           type: TRANSACTION_TYPE.TRANSFER,
           amount,

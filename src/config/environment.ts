@@ -18,16 +18,18 @@ function getEnv(key: string, defaultValue: string): string {
   return process.env[key] || defaultValue;
 }
 
+const hasJawsDB = !!process.env.JAWSDB_URL;
+
 export const config = {
   nodeEnv: getEnv('NODE_ENV', 'development'),
   port: parseInt(getEnv('PORT', '3000'), 10),
   isProduction: getEnv('NODE_ENV', 'development') === 'production',
   db: {
-    host: requireEnv('DB_HOST'),
+    host: hasJawsDB ? '' : requireEnv('DB_HOST'),
     port: parseInt(getEnv('DB_PORT', '3306'), 10),
-    name: requireEnv('DB_NAME'),
-    user: requireEnv('DB_USER'),
-    password: requireEnv('DB_PASSWORD'),
+    name: hasJawsDB ? '' : requireEnv('DB_NAME'),
+    user: hasJawsDB ? '' : requireEnv('DB_USER'),
+    password: hasJawsDB ? '' : requireEnv('DB_PASSWORD'),
   },
   jwt: {
     secret: requireEnv('JWT_SECRET'),

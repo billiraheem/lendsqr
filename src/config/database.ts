@@ -1,16 +1,24 @@
 import { Knex } from 'knex';
 import { config } from './environment';
 
+function getConnectionConfig(): Knex.MySql2ConnectionConfig | string {
+  const jawsdbUrl = process.env.JAWSDB_URL;
+  if (jawsdbUrl) {
+    return jawsdbUrl;
+  }
+  return {
+    host: config.db.host,
+    port: config.db.port,
+    database: config.db.name,
+    user: config.db.user,
+    password: config.db.password,
+  };
+}
+
 const knexConfig: Record<string, Knex.Config> = {
   development: {
     client: 'mysql2',
-    connection: {
-      host: config.db.host,
-      port: config.db.port,
-      database: config.db.name,
-      user: config.db.user,
-      password: config.db.password,
-    },
+    connection: getConnectionConfig(),
     pool: {
       min: 2,
       max: 10,
@@ -28,13 +36,7 @@ const knexConfig: Record<string, Knex.Config> = {
 
   production: {
     client: 'mysql2',
-    connection: {
-      host: config.db.host,
-      port: config.db.port,
-      database: config.db.name,
-      user: config.db.user,
-      password: config.db.password,
-    },
+    connection: getConnectionConfig(),
     pool: {
       min: 2,
       max: 20,
