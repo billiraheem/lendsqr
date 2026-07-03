@@ -44,6 +44,7 @@ const knexConfig: Record<string, Knex.Config> = {
     migrations: {
       directory: './dist/database/migrations',
       tableName: 'knex_migrations',
+      loadExtensions: ['.js'],
     },
   },
 

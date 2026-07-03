@@ -9,8 +9,7 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "heroku-postbuild": "npm run build",
-    "prestart": "knex migrate:latest --knexfile dist/config/database.js || echo 'Migration skipped'",
+    "prestart": "npx knex migrate:latest --knexfile knexfile.js || echo 'Migration skipped'",
     "start": "node dist/server.js",
     "test": "jest --forceExit --detectOpenHandles",
     "test:watch": "jest --watch --forceExit --detectOpenHandles",
