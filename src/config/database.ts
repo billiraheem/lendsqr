@@ -2,9 +2,9 @@ import { Knex } from 'knex';
 import { config } from './environment';
 
 function getConnectionConfig(): Knex.MySql2ConnectionConfig | string {
-  const jawsdbUrl = process.env.JAWSDB_URL;
-  if (jawsdbUrl) {
-    return jawsdbUrl;
+  const dbUrl = process.env.DATABASE_URL || process.env.JAWSDB_URL;
+  if (dbUrl) {
+    return dbUrl;
   }
   return {
     host: config.db.host,
