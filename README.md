@@ -107,7 +107,8 @@ src/
 
 ## API Endpoints
 
-Base URL: `http://localhost:3000/api/v1`
+- **Development Base URL**: `http://localhost:3000/api/v1`
+- **Production Base URL**: `https://balikis-abdulraheem-lendsqr-be-test.onrender.com/api/v1`
 
 ### Authentication
 
