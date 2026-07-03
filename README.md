@@ -87,24 +87,7 @@ src/
 
 ## E-R Diagram
 
-```
-┌──────────────────┐         ┌──────────────────┐         ┌──────────────────────┐
-│      users       │         │    accounts       │         │    transactions      │
-│──────────────────│         │──────────────────│         │──────────────────────│
-│ PK id (INT)      │◄─1:1──►│ PK id (INT)      │◄─1:N──►│ PK id (INT)          │
-│ email (VARCHAR)  │         │ FK user_id (INT)  │         │ reference (VARCHAR)  │
-│ first_name       │         │ account_number    │         │ FK account_id (INT)  │
-│ last_name        │         │ balance (DECIMAL) │         │ type (ENUM)          │
-│ password_hash    │         │ is_active (BOOL)  │         │ amount (DECIMAL)     │
-│ is_active (BOOL) │         │ created_at        │         │ balance_before       │
-│ created_at       │         │ updated_at        │         │ balance_after        │
-│ updated_at       │         └──────────────────┘         │ metadata (JSON)      │
-└──────────────────┘                  │                    │ FK counterparty_id   │
-                                      │                    │ description          │
-                                      │         N:1        │ status (ENUM)        │
-                                      └────────────────────│ created_at           │
-                                                           └──────────────────────┘
-```
+![E-R Diagram](docs/er-diagram.png)
 
 ### Relationships
 
@@ -297,8 +280,8 @@ Base URL: `http://localhost:3000/api/v1`
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<your-username>/demo-credit.git
-cd demo-credit
+git clone https://github.com/billiraheem/lendsqr.git
+cd lendsqr
 
 # 2. Install dependencies
 npm install
