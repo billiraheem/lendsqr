@@ -12,6 +12,9 @@ import { StatusCodes } from 'http-status-codes';
 
 const app: Application = express();
 
+// Trust the reverse proxy (Render / Heroku) to allow rate limiting to fetch client IPs
+app.set('trust proxy', 1);
+
 app.use(helmet());
 app.use(cors());
 app.use(generalLimiter);

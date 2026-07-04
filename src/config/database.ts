@@ -4,7 +4,8 @@ import { config } from './environment';
 function getConnectionConfig(): Knex.MySql2ConnectionConfig | string {
   const dbUrl = process.env.DATABASE_URL || process.env.JAWSDB_URL;
   if (dbUrl) {
-    return dbUrl;
+    // Strip query parameters (like ?ssl-mode=REQUIRED) which cause warnings/errors in the mysql2 driver
+    return dbUrl.split('?')[0];
   }
   return {
     host: config.db.host,

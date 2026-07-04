@@ -1,0 +1,359 @@
+{
+	"info": {
+		"_postman_id": "8e3d23cc-0e86-4e56-b8df-d55a2989dc1d",
+		"name": "Demo Credit Wallet API",
+		"description": "Postman collection for testing the Demo Credit MVP Wallet backend service (both locally and in production). Contains automated token extraction scripts for seamless testing.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"health"
+					]
+				},
+				"description": "Verifies that the API server is running and can connect to the database."
+			},
+			"response": []
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register John Doe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registers a new user and automatically spins up their corresponding wallet account."
+					},
+					"response": []
+				},
+				{
+					"name": "Login John Doe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"if (response.status === 'success' && response.data.token) {",
+									"    pm.collectionVariables.set('authToken', response.data.token);",
+									"    console.log('Successfully set authToken collection variable');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticates John Doe and extracts the JWT token, saving it to the collection variables for use in wallet endpoints."
+					},
+					"response": []
+				},
+				{
+					"name": "Register Jane Smith",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jane.smith@example.com\",\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\",\n  \"password\": \"SecurePass456!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registers Jane Smith as a secondary user to enable peer-to-peer transfer testing."
+					},
+					"response": []
+				},
+				{
+					"name": "Login Jane Smith",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"if (response.status === 'success' && response.data.token) {",
+									"    pm.collectionVariables.set('authToken', response.data.token);",
+									"    console.log('Successfully set authToken collection variable to Jane');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jane.smith@example.com\",\n  \"password\": \"SecurePass456!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticates Jane Smith and updates the collection's auth token variable."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints to manage user registration and session tokens."
+		},
+		{
+			"name": "Wallet Operations",
+			"item": [
+				{
+					"name": "Get Account Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/account",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account"
+							]
+						},
+						"description": "Fetches the wallet account details (balance, account number, status) for the logged-in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Fund Wallet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 5000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/account/fund",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"fund"
+							]
+						},
+						"description": "Deposits funds into the logged-in user's wallet."
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw Funds",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 1500\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/account/withdraw",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"withdraw"
+							]
+						},
+						"description": "Withdraws funds from the logged-in user's wallet."
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Funds",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipient_account_number\": \"2057652400\",\n  \"amount\": 2000,\n  \"description\": \"P2P transfer\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/account/transfer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"transfer"
+							]
+						},
+						"description": "Transfers funds from the logged-in user's account to a recipient's account number."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transactions History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/account/transactions?page=1&limit=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Fetches a paginated history of all transactions (funding, withdrawals, transfers) for the logged-in user."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints to manage wallet operations such as funding, withdrawing, transferring, and transaction history."
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://balikis-abdulraheem-lendsqr-be-test.onrender.com/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

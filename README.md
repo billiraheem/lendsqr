@@ -109,6 +109,7 @@ src/
 
 - **Development Base URL**: `http://localhost:3000/api/v1`
 - **Production Base URL**: `https://balikis-abdulraheem-lendsqr-be-test.onrender.com/api/v1`
+- **Postman Collection**: [docs/demo-credit-wallet.postman_collection.json](docs/demo-credit-wallet.postman_collection.json) (Import this file directly into Postman to test all endpoints)
 
 ### Authentication
 
